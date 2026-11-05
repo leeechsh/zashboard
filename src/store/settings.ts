@@ -398,7 +398,7 @@ export const tableWidthMode = useStorage('config/table-width-mode', TABLE_WIDTH_
 export const connectionTableColumns = useStorage<CONNECTIONS_TABLE_ACCESSOR_KEY[]>(
   'config/connection-table-columns',
   [
-    CONNECTIONS_TABLE_ACCESSOR_KEY.Close,
+    CONNECTIONS_TABLE_ACCESSOR_KEY.SourceIP,
     CONNECTIONS_TABLE_ACCESSOR_KEY.Host,
     CONNECTIONS_TABLE_ACCESSOR_KEY.Type,
     CONNECTIONS_TABLE_ACCESSOR_KEY.Rule,
@@ -408,6 +408,7 @@ export const connectionTableColumns = useStorage<CONNECTIONS_TABLE_ACCESSOR_KEY[
     CONNECTIONS_TABLE_ACCESSOR_KEY.Download,
     CONNECTIONS_TABLE_ACCESSOR_KEY.Upload,
     CONNECTIONS_TABLE_ACCESSOR_KEY.ConnectTime,
+    CONNECTIONS_TABLE_ACCESSOR_KEY.Close,
   ],
 )
 export const connectionCardLines = useStorage<CONNECTIONS_TABLE_ACCESSOR_KEY[][]>(

@@ -4,6 +4,7 @@ import { i18n } from '@/i18n'
 import { language } from '@/store/settings'
 import { activeBackend } from '@/store/setup'
 import ConnectionsPage from '@/views/ConnectionsPage.vue'
+import UsagePage from '@/views/UsagePage.vue'
 import HomePage from '@/views/HomePage.vue'
 import LogsPage from '@/views/LogsPage.vue'
 import OverviewPage from '@/views/OverviewPage.vue'
@@ -30,6 +31,11 @@ const childrenRouter = [
     path: 'connections',
     name: ROUTE_NAME.connections,
     component: ConnectionsPage,
+  },
+  {
+    path: 'usage',
+    name: ROUTE_NAME.usage,
+    component: UsagePage,
   },
   {
     path: 'logs',

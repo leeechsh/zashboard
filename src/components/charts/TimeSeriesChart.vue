@@ -4,12 +4,16 @@
     data-page-swipe-ignore
   >
     <div class="flex min-w-0 items-center gap-2 px-3 pt-2 pb-0.5">
-      <span class="text-base-content/70 min-w-0 flex-1 truncate text-[11px] leading-4 font-medium">
+      <span
+        class="text-base-content/80 min-w-0 flex-1 truncate leading-4 font-medium"
+        :class="headerTextClass"
+      >
         {{ title }}
       </span>
       <span
         v-if="legend.length"
-        class="text-base-content/70 flex min-w-0 items-center gap-2.5 text-[10px] leading-4"
+        class="text-base-content/75 flex min-w-0 items-center gap-2.5 leading-4"
+        :class="legendTextClass"
       >
         <span
           v-for="item in legend"
@@ -46,6 +50,7 @@
 <script setup lang="ts">
 import { echarts, useChartTheme, useEChart, type EChartOption } from '@/composables/use-echart'
 import { PauseCircleIcon, PlayCircleIcon } from '@heroicons/vue/24/outline'
+import dayjs from 'dayjs'
 import { computed, ref } from 'vue'
 import type { ChartSeries, ChartTooltipParam } from './chart-types'
 import { getChartPointValue } from './chart-types'
@@ -59,10 +64,16 @@ const props = withDefaults(
     yAxisFloor?: number
     windowSeconds?: number
     showPauseButton?: boolean
+    headerTextClass?: string
+    legendTextClass?: string
+    showXAxisLabels?: boolean
   }>(),
   {
     windowSeconds: 20,
     showPauseButton: true,
+    headerTextClass: 'text-[11px]',
+    legendTextClass: 'text-[10px]',
+    showXAxisLabels: false,
   },
 )
 
@@ -88,7 +99,7 @@ const options = computed<EChartOption>(() => {
   return {
     animationDurationUpdate: 1000,
     animationEasingUpdate: 'linear',
-    grid: { left: 42, top: 12, right: 10, bottom: 8 },
+    grid: { left: 42, top: 12, right: 10, bottom: props.showXAxisLabels ? 28 : 8 },
     tooltip: {
       show: true,
       trigger: 'axis',
@@ -111,7 +122,15 @@ const options = computed<EChartOption>(() => {
       axisLine: { show: false },
       axisTick: { show: false },
       splitLine: { show: false },
-      axisLabel: { show: false },
+      axisLabel: {
+        show: props.showXAxisLabels,
+        color: colors.textMuted,
+        fontFamily: fontFamily.value,
+        fontSize: 10,
+        hideOverlap: true,
+        formatter: (value: number) =>
+          dayjs(value).format(props.windowSeconds <= 86400 ? 'HH:mm' : 'MM-DD HH:mm'),
+      },
     },
     yAxis: {
       type: 'value',

@@ -9,6 +9,11 @@ import dayjs from 'dayjs'
 import * as ipaddr from 'ipaddr.js'
 import { ref, shallowRef, watch } from 'vue'
 import { driver, type ConnectionAccessor, type ConnectionsFilter } from './driver'
+import {
+  startDataUsage,
+  stopDataUsage,
+  updateDataUsage,
+} from './data-usage'
 
 export type ConnectionDisplayOptions = {
   mode: 'card' | 'table'
@@ -36,6 +41,7 @@ let cancel: (() => void) | undefined
 
 export const initConnections = () => {
   stopConnections()
+  startDataUsage()
 
   const accessor = connectionAccessor()
   const source = driver().connections.subscribe()
@@ -65,6 +71,8 @@ export const initConnections = () => {
       currentMap.set(connection.id, connection)
       return connection
     })
+
+    updateDataUsage(active, payload.uploadTotal, payload.downloadTotal)
 
     const closed = Array.from(previousMap.values())
     previousMap = currentMap
@@ -111,6 +119,7 @@ export const initConnections = () => {
 export const stopConnections = () => {
   cancel?.()
   cancel = undefined
+  stopDataUsage()
   activeConnections.value = []
   closedConnections.value = []
   closedBatch.value = []
